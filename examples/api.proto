@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package example;
+
+import "google/protobuf/descriptor.proto";
+import "options/options.proto";
+
+option go_package = "example";
+
+
+message User {
+    string name = 1;
+    string email = 2;
+    int32 age = 3;
+}
+
+message GetUserRequest {
+    int32 id = 1;
+}
+
+message GetUserResponse {
+    User user = 1;
+}
+
+service UserService {
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+        option (api_options) = {
+            summary: "Get User Request"
+            path: "/myapi/mymethod"
+            method: "POST"
+            query_params: {
+                name: "id",
+                type: "int",
+                description: "The ID of the item to fetch.",
+                required: true,
+            }
+        };
+    };
+}

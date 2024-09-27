@@ -1,0 +1,31 @@
+// api_options.proto
+syntax = "proto3";
+
+option go_package = "github.com/lovelyoyrmia/protobuf-documentation/options";
+
+import "google/protobuf/descriptor.proto";
+
+// Define a message for a query parameter
+message QueryParameter {
+  string name = 1;        // Name of the query parameter
+  string type = 2;        // Type of the parameter (e.g., string, int)
+  string description = 3; // Description of the parameter
+  bool required = 4;      // Whether the parameter is required
+}
+
+message APIOptions {
+  string path = 51234; // Unique field number for path
+  string method = 51235; // Unique field number for HTTP method
+  string summary = 51237; // Unique field number for Summary
+  string description = 51238; // Unique field number for Description
+  repeated QueryParameter query_params = 51239;
+}
+
+// Define a custom option for API annotations
+extend google.protobuf.MethodOptions {
+  APIOptions api_options = 511122;
+}
+
+extend google.protobuf.FieldOptions {
+  bool required = 51236; // Custom option for field requirements
+}

@@ -1,0 +1,162 @@
+{
+  "name": "API Documentation",
+  "author": "",
+  "base_url": "",
+  "messages": [
+    {
+      "name": "QueryParameter",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string*"
+        },
+        {
+          "name": "type",
+          "type": "string*"
+        },
+        {
+          "name": "description",
+          "type": "string*"
+        },
+        {
+          "name": "required",
+          "type": "bool*"
+        }
+      ]
+    },
+    {
+      "name": "APIOptions",
+      "fields": [
+        {
+          "name": "path",
+          "type": "string*"
+        },
+        {
+          "name": "method",
+          "type": "string*"
+        },
+        {
+          "name": "summary",
+          "type": "string*"
+        },
+        {
+          "name": "description",
+          "type": "string*"
+        },
+        {
+          "name": "query_params",
+          "type": "#.QueryParameter[]"
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string*"
+        },
+        {
+          "name": "email",
+          "type": "string*"
+        },
+        {
+          "name": "age",
+          "type": "int32*"
+        }
+      ]
+    },
+    {
+      "name": "GetUserRequest",
+      "fields": [
+        {
+          "name": "id",
+          "type": "int32*"
+        }
+      ]
+    },
+    {
+      "name": "GetUserResponse",
+      "fields": [
+        {
+          "name": "user",
+          "type": "#User*"
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string*"
+        },
+        {
+          "name": "email",
+          "type": "string*"
+        },
+        {
+          "name": "age",
+          "type": "int32*"
+        }
+      ]
+    },
+    {
+      "name": "GetCustomerRequest",
+      "fields": [
+        {
+          "name": "id",
+          "type": "int32*"
+        }
+      ]
+    },
+    {
+      "name": "GetCustomerResponse",
+      "fields": [
+        {
+          "name": "user",
+          "type": "#Customer[]"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "name": "UserService",
+      "methods": [
+        {
+          "name": "GetUser",
+          "summary": "Get User Request",
+          "description": "",
+          "path": "/myapi/mymethod",
+          "method": "POST",
+          "input_type": "#GetUserRequest",
+          "output_type": "#GetUserResponse",
+          "query_params": [
+            {
+              "name": "id",
+              "type": "int",
+              "description": "The ID of the item to fetch.",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CustomerService",
+      "methods": [
+        {
+          "name": "GetCustomer",
+          "summary": "",
+          "description": "",
+          "path": "",
+          "method": "",
+          "input_type": "#GetCustomerRequest",
+          "output_type": "#GetCustomerResponse",
+          "query_params": []
+        }
+      ]
+    }
+  ]
+}
