@@ -1,4 +1,4 @@
-module github.com/lovelyoyrmia/protobuf-documentation
+module github.com/lovelyoyrmia/protodoc
 
 go 1.22.5
 

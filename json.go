@@ -3,6 +3,8 @@ package protodoc
 import (
 	"encoding/json"
 	"os"
+
+	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 // JsonDoc represents the overall API documentation structure.
@@ -110,10 +112,10 @@ type QueryParameterDoc struct {
 }
 
 type jsonDoc struct {
-	p *protodoc
+	p *IProtodoc
 }
 
-func newJsonDoc(p *protodoc) Protodoc {
+func NewJsonDoc(p *IProtodoc) Protodoc {
 	return &jsonDoc{p}
 }
 
@@ -136,13 +138,13 @@ func newJsonDoc(p *protodoc) Protodoc {
 //		   return
 //	 }
 func (j *jsonDoc) Generate() []byte {
-	doc := JsonDoc{Name: j.p.name}
+	doc := JsonDoc{Name: j.p.Name}
 
-	for _, fileDescriptor := range j.p.fileDescriptors {
+	for _, fileDescriptor := range j.p.FileDescriptors {
 		for _, msg := range fileDescriptor.MessageType {
 			message := MessageDoc{Name: msg.GetName()}
 			for _, field := range msg.Field {
-				typeName := removeTypePrefix(field, fileDescriptor.GetPackage())
+				typeName := internal.RemoveTypePrefix(field, fileDescriptor.GetPackage())
 				message.Fields = append(message.Fields, FieldDoc{
 					Name: field.GetName(),
 					Type: typeName,
@@ -155,7 +157,7 @@ func (j *jsonDoc) Generate() []byte {
 			serviceDoc := ServiceDoc{Name: service.GetName()}
 
 			for _, method := range service.Method {
-				option := extractMethod(method, fileDescriptor.GetPackage())
+				option := internal.ExtractMethod(method, fileDescriptor.GetPackage())
 
 				// Convert the query parameters
 				queryParams := make([]*QueryParameterDoc, 0)
@@ -191,7 +193,7 @@ func (j *jsonDoc) Generate() []byte {
 func (j *jsonDoc) Execute() error {
 	doc := j.Generate()
 
-	err := os.WriteFile(j.p.destFile, doc, 0644)
+	err := os.WriteFile(j.p.DestFile, doc, 0644)
 	if err != nil {
 		return err
 	}

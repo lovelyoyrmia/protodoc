@@ -1,4 +1,4 @@
-package protodoc
+package internal
 
 type methodOptions struct {
 	Name            string

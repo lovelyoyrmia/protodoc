@@ -1,4 +1,4 @@
-package protodoc
+package internal
 
 import (
 	"errors"
@@ -6,17 +6,15 @@ import (
 	"os"
 	"strings"
 
-	"github.com/lovelyoyrmia/protobuf-documentation/options"
+	"github.com/lovelyoyrmia/protodoc/options"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
-const defaultApiDocName = "API Documentation"
-
 var ErrFileSetNotFound = errors.New("no files found in descriptor set")
 
-// readFile function to read descriptor file and returns all files descriptor proto
-func readFile(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
+// ReadFile function to read descriptor file and returns all files descriptor proto
+func ReadFile(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -34,10 +32,10 @@ func readFile(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
 	return fileDescSet.File, nil
 }
 
-// removeTypePrefix removes the "TYPE_" prefix from a given field type
+// RemoveTypePrefix removes the "TYPE_" prefix from a given field type
 // and returns a string representation of the type. It also handles
 // optional and repeated labels for both primitive and message types.
-func removeTypePrefix(field *descriptorpb.FieldDescriptorProto, packageName string) string {
+func RemoveTypePrefix(field *descriptorpb.FieldDescriptorProto, packageName string) string {
 	typeField := field.GetType()
 	typeStr := strings.TrimPrefix(typeField.String(), "TYPE_")
 
@@ -56,7 +54,7 @@ func removeTypePrefix(field *descriptorpb.FieldDescriptorProto, packageName stri
 
 	// Handle message types
 	if typeField == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
-		messageType := removePackagePrefix(field.GetTypeName(), packageName)
+		messageType := RemovePackagePrefix(field.GetTypeName(), packageName)
 		return messageType + result // Append optional/repeated notation
 	}
 
@@ -64,9 +62,9 @@ func removeTypePrefix(field *descriptorpb.FieldDescriptorProto, packageName stri
 	return strings.ToLower(typeStr) + result
 }
 
-// removePackagePrefix function to remove the package prefix of the message.
+// RemovePackagePrefix function to remove the package prefix of the message.
 // Example: from ".example.Message" to "@Message"
-func removePackagePrefix(typeName string, packageName string) string {
+func RemovePackagePrefix(typeName string, packageName string) string {
 	if strings.HasPrefix(typeName, fmt.Sprintf(".%s", packageName)) {
 		typeStr := strings.TrimPrefix(typeName, fmt.Sprintf(".%s.", packageName))
 		return fmt.Sprintf("#%s", typeStr)
@@ -75,13 +73,13 @@ func removePackagePrefix(typeName string, packageName string) string {
 	return typeName
 }
 
-// extractMethod checks the annotations on the method
-func extractMethod(method *descriptorpb.MethodDescriptorProto, packageName string) *methodOptions {
+// ExtractMethod checks the annotations on the method
+func ExtractMethod(method *descriptorpb.MethodDescriptorProto, packageName string) *methodOptions {
 	option := new(methodOptions)
 
 	option.Name = method.GetName()
-	option.InputType = removePackagePrefix(method.GetInputType(), packageName)
-	option.OutputType = removePackagePrefix(method.GetOutputType(), packageName)
+	option.InputType = RemovePackagePrefix(method.GetInputType(), packageName)
+	option.OutputType = RemovePackagePrefix(method.GetOutputType(), packageName)
 
 	// Retrieve custom options
 	if method.GetOptions() != nil {

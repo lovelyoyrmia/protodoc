@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/lovelyoyrmia/protobuf-documentation/protodoc"
+	"github.com/lovelyoyrmia/protodoc"
 )
 
 // This is the main entry point for the documentation generator

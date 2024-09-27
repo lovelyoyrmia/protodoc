@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 type mdDoc struct {
-	p *protodoc
+	p *IProtodoc
 }
 
-func newMarkdownDoc(p *protodoc) Protodoc {
+func NewMarkdownDoc(p *IProtodoc) Protodoc {
 	return &mdDoc{p}
 }
 
@@ -38,9 +40,9 @@ func newMarkdownDoc(p *protodoc) Protodoc {
 func (m *mdDoc) Generate() []byte {
 	var sb strings.Builder
 
-	sb.WriteString(fmt.Sprintf("# %s\n\n", m.p.name))
+	sb.WriteString(fmt.Sprintf("# %s\n\n", m.p.Name))
 
-	for _, fileDescriptor := range m.p.fileDescriptors {
+	for _, fileDescriptor := range m.p.FileDescriptors {
 		packageName := fileDescriptor.GetPackage()
 
 		for _, msg := range fileDescriptor.MessageType {
@@ -49,7 +51,7 @@ func (m *mdDoc) Generate() []byte {
 			sb.WriteString("|------------|------|\n")
 
 			for _, field := range msg.Field {
-				typeName := removeTypePrefix(field, packageName)
+				typeName := internal.RemoveTypePrefix(field, packageName)
 
 				sb.WriteString(
 					fmt.Sprintf("| %s | %s |\n",
@@ -65,8 +67,8 @@ func (m *mdDoc) Generate() []byte {
 			sb.WriteString("### Service: " + service.GetName() + "\n")
 
 			for _, method := range service.Method {
-				inputType := removePackagePrefix(method.GetInputType(), packageName)
-				outputType := removePackagePrefix(method.GetOutputType(), packageName)
+				inputType := internal.RemovePackagePrefix(method.GetInputType(), packageName)
+				outputType := internal.RemovePackagePrefix(method.GetOutputType(), packageName)
 				// Add path information (assuming you have a way to derive it)
 				path := "/" + service.GetName() + "/" + method.GetName() // Example path
 
@@ -84,7 +86,7 @@ func (m *mdDoc) Generate() []byte {
 func (m *mdDoc) Execute() error {
 	doc := m.Generate()
 
-	file, err := os.Create(m.p.destFile)
+	file, err := os.Create(m.p.DestFile)
 	if err != nil {
 		return err
 	}
