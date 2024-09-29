@@ -16,12 +16,14 @@ func main() {
 
 	flags := ParseFlags(os.Stdout, os.Args)
 
-	if HandleFlags(flags) {
+	if flags.handleFlags() {
 		os.Exit(flags.Code())
 	}
 
+	flags.parseOptions()
+
 	// Run protoc command
-	runCommand(flags.protoDir)
+	flags.runCommand()
 
 	// Initialize protodoc
 	pbDoc, err := protodoc.New(
@@ -43,38 +45,27 @@ func main() {
 
 	// Clean Up
 	if err := os.Remove(protodoc.DefaultDescriptorFile); err != nil {
-		fmt.Printf("Error: %v\n", err)
+		fmt.Printf("failed to remove desc file: err=%v\n", err)
 		return
 	}
 
-	fmt.Println("Generated the code !")
+	fmt.Println("✅ Generated the code !")
 }
 
-func runCommand(protoDir string) {
+func (f *Flags) runCommand() {
 	var l sync.Mutex
 	l.Lock()
 	defer l.Unlock()
 
 	// Gather all .proto files
-	var protoFiles []string
-
-	err := filepath.Walk(protoDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.IsDir() && strings.HasSuffix(info.Name(), ".proto") {
-			protoFiles = append(protoFiles, path)
-		}
-		return nil
-	})
-
+	protoFiles, err := getAllProtoFiles(f.protoDir, f.sourceRelative)
 	if err != nil {
-		fmt.Printf("error walking the path: %v\n", err)
+		fmt.Println("error reading proto files!")
 		return
 	}
 
 	// Prepare the protoc command with all proto files
-	cmdArgs := append([]string{"--descriptor_set_out=" + protodoc.DefaultDescriptorFile, "--proto_path=" + protoDir}, protoFiles...)
+	cmdArgs := append([]string{"--descriptor_set_out=" + protodoc.DefaultDescriptorFile, "--proto_path=" + f.protoDir}, protoFiles...)
 
 	// Exec command protoc to generate descriptor file
 	cmd := exec.Command("protoc", cmdArgs...)
@@ -93,8 +84,16 @@ func runCommand(protoDir string) {
 	}
 }
 
-// HandleFlags checks if there's a match and returns true if it was "handled"
-func HandleFlags(f *Flags) bool {
+// parseOptions parses the documentation options from the Flags struct.
+func (f *Flags) parseOptions() {
+	if f.docOpt != "" && f.docOpt == "source_relative" {
+		f.sourceRelative = true
+		return
+	}
+}
+
+// handleFlags checks if there's a match and returns true if it was "handled"
+func (f *Flags) handleFlags() bool {
 	if f.ShowHelp() {
 		f.PrintHelp()
 		return true
@@ -119,4 +118,39 @@ func HandleFlags(f *Flags) bool {
 	}
 
 	return false
+}
+
+func getAllProtoFiles(protoDir string, sourceRelative bool) ([]string, error) {
+	var protoFiles []string
+
+	if !sourceRelative {
+		err := filepath.Walk(protoDir, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if !info.IsDir() && strings.HasSuffix(info.Name(), ".proto") {
+				protoFiles = append(protoFiles, path)
+			}
+			return nil
+		})
+
+		if err != nil {
+			return []string{}, err
+		}
+
+		return protoFiles, nil
+	}
+
+	files, err := os.ReadDir(protoDir)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, file := range files {
+		if filepath.Ext(file.Name()) == ".proto" {
+			protoFiles = append(protoFiles, filepath.Join(protoDir, file.Name()))
+		}
+	}
+
+	return protoFiles, nil
 }

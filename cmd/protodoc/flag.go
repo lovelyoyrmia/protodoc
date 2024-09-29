@@ -35,16 +35,18 @@ func Version() string {
 
 // Flags contains details about the CLI invocation of protodoc
 type Flags struct {
-	appName     string
-	flagSet     *flag.FlagSet
-	err         error
-	showHelp    bool
-	showVersion bool
-	name        string
-	protoDir    string
-	typeName    string
-	docOut      string
-	writer      io.Writer
+	appName        string
+	flagSet        *flag.FlagSet
+	err            error
+	showHelp       bool
+	showVersion    bool
+	name           string
+	protoDir       string
+	typeName       string
+	docOut         string
+	docOpt         string
+	sourceRelative bool
+	writer         io.Writer
 }
 
 // Code returns the status code to exit with after handling the supplied flags
@@ -130,6 +132,7 @@ func ParseFlags(w io.Writer, args []string) *Flags {
 	f.flagSet.StringVar(&f.protoDir, "proto_dir", "", "proto_dir is the directory of the all protobuf files.")
 	f.flagSet.StringVar(&f.docOut, "doc_out", protodoc.DefaultApiDocsOut, "doc_out is the custom path directory of the API Documentation will be created.")
 	f.flagSet.StringVar(&f.typeName, "type", protodoc.ProtodocTypeMD.String(), "type is the API Documentation type.")
+	f.flagSet.StringVar(&f.docOpt, "doc_opt", "", "optional documentation options (source_relative)")
 
 	f.flagSet.BoolVar(&f.showHelp, "help", false, "Show this help message")
 	f.flagSet.BoolVar(&f.showVersion, "version", false, fmt.Sprintf("Print the current version (%v)", Version()))
