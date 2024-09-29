@@ -97,10 +97,12 @@ func runCommand(protoDir string) {
 func HandleFlags(f *Flags) bool {
 	if f.ShowHelp() {
 		f.PrintHelp()
+		return true
 	}
 
 	if f.ShowVersion() {
 		f.PrintVersion()
+		return true
 	}
 
 	// Check all required fields
@@ -108,11 +110,13 @@ func HandleFlags(f *Flags) bool {
 		"proto_dir": f.protoDir,
 	}) {
 		f.PrintError()
+		return true
 	}
 
 	if f.ShowValidTypes() {
 		f.PrintValidTypes()
+		return true
 	}
 
-	return true
+	return false
 }
