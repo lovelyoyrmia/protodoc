@@ -2,12 +2,10 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"slices"
 	"strings"
 	"sync"
 
@@ -16,58 +14,20 @@ import (
 
 func main() {
 
-	var name, protodir, destFile, typeName, filename string
+	flags := ParseFlags(os.Stdout, os.Args)
 
-	flag.StringVar(&name, "name", "API Documentation", "name is the name of the API Documentation.")
-	flag.StringVar(&protodir, "proto_dir", "", "proto_dir is the directory of the all protobuf files.")
-	flag.StringVar(&destFile, "dest_file", "", "dest_file is the path name of the API Documentation will be created.")
-	flag.StringVar(&typeName, "type", protodoc.ProtodocTypeMD.String(), "type is the API Documentation type.")
-	flag.StringVar(&filename, "file_desc", "", "file_desc is the path name of the generated descriptor file.")
-
-	// Help tag
-	if len(os.Args) > 1 && (os.Args[1] == "--help" || os.Args[1] == "-h") {
-		fmt.Println("Usage:")
-		flag.PrintDefaults() // Print all flag descriptions
-		return
-	}
-
-	// Parse the flags
-	flag.Parse()
-
-	// Check all required fields
-	if err := checkRequiredFields(map[string]string{
-		"proto_dir": protodir,
-		"dest_file": destFile,
-		"file_desc": filename,
-	}); err != nil {
-		fmt.Println(err)
-		fmt.Println("Use --help or -h for usage information.")
-		return
-	}
-
-	// Valid type documentation
-	validTypes := []string{
-		protodoc.ProtodocTypeJson.String(),
-		protodoc.ProtodocTypeMD.String(),
-	}
-
-	// Check if the given command is in valid types
-	if typeName == "" && !slices.Contains(validTypes, typeName) {
-		fmt.Printf("Error: Invalid command type '%s'.\n", typeName)
-		fmt.Println("Valid command types are:", strings.Join(validTypes, ", "))
-		fmt.Println("Use --help or -h for usage information.")
-		return
+	if HandleFlags(flags) {
+		os.Exit(flags.Code())
 	}
 
 	// Run protoc command
-	runCommand(protodir, filename)
+	runCommand(flags.protoDir)
 
 	// Initialize protodoc
 	pbDoc, err := protodoc.New(
-		filename,
-		destFile,
-		protodoc.WithName(name),
-		protodoc.WithType(protodoc.ProtodocType(typeName)),
+		protodoc.WithDocOut(flags.docOut),
+		protodoc.WithName(flags.name),
+		protodoc.WithType(protodoc.ProtodocType(flags.typeName)),
 	)
 
 	if err != nil {
@@ -82,13 +42,15 @@ func main() {
 	}
 
 	// Clean Up
-	if err := os.Remove(filename); err != nil {
+	if err := os.Remove(protodoc.DefaultDescriptorFile); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
+
+	fmt.Println("Generated the code !")
 }
 
-func runCommand(protoDir, descOut string) {
+func runCommand(protoDir string) {
 	var l sync.Mutex
 	l.Lock()
 	defer l.Unlock()
@@ -112,7 +74,7 @@ func runCommand(protoDir, descOut string) {
 	}
 
 	// Prepare the protoc command with all proto files
-	cmdArgs := append([]string{"--descriptor_set_out=" + descOut, "--proto_path=" + protoDir}, protoFiles...)
+	cmdArgs := append([]string{"--descriptor_set_out=" + protodoc.DefaultDescriptorFile, "--proto_path=" + protoDir}, protoFiles...)
 
 	// Exec command protoc to generate descriptor file
 	cmd := exec.Command("protoc", cmdArgs...)
@@ -131,16 +93,26 @@ func runCommand(protoDir, descOut string) {
 	}
 }
 
-// Function to check required fields
-func checkRequiredFields(fields map[string]string) error {
-	var missingFields []string
-	for fieldName, fieldValue := range fields {
-		if fieldValue == "" {
-			missingFields = append(missingFields, fieldName)
-		}
+// HandleFlags checks if there's a match and returns true if it was "handled"
+func HandleFlags(f *Flags) bool {
+	if f.ShowHelp() {
+		f.PrintHelp()
 	}
-	if len(missingFields) > 0 {
-		return fmt.Errorf("error: The following fields must not be empty: %s", strings.Join(missingFields, ", "))
+
+	if f.ShowVersion() {
+		f.PrintVersion()
 	}
-	return nil
+
+	// Check all required fields
+	if !f.CheckRequiredArgs(map[string]string{
+		"proto_dir": f.protoDir,
+	}) {
+		f.PrintError()
+	}
+
+	if f.ShowValidTypes() {
+		f.PrintValidTypes()
+	}
+
+	return true
 }

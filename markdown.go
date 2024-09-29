@@ -34,8 +34,7 @@ func NewMarkdownDoc(p *IProtodoc) Protodoc {
 //
 //	 // Execute the protodoc to generate API Documentation
 //	 if err := mdDoc.Execute(); err != nil {
-//		   fmt.Printf("failed to execute, err=%v\n", err)
-//		   return
+//		   return err
 //	 }
 func (m *mdDoc) Generate() []byte {
 	var sb strings.Builder

@@ -1,7 +1,7 @@
 // api_options.proto
 syntax = "proto3";
 
-option go_package = "github.com/lovelyoyrmia/protobuf-documentation/options";
+option go_package = "github.com/lovelyoyrmia/protodoc/options";
 
 import "google/protobuf/descriptor.proto";
 

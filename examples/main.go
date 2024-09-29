@@ -14,7 +14,7 @@ import (
 // This is the main entry point for the documentation generator
 func main() {
 	protoDir := "."
-	descOut := "api_descriptor.desc"
+	descOut := "api.desc"
 
 	// Gather all .proto files
 	var protoFiles []string
@@ -54,7 +54,7 @@ func main() {
 	}
 
 	// Initialize protodoc
-	mdDoc, err := protodoc.New(descOut, "API_DOCUMENTATION.md")
+	mdDoc, err := protodoc.New()
 
 	if err != nil {
 		fmt.Printf("failed to initialize, err=%v\n", err)
@@ -68,7 +68,7 @@ func main() {
 	}
 
 	// Initialize protodoc
-	jsonDoc, err := protodoc.New(descOut, "API_DOCUMENTATION.json", protodoc.WithType(protodoc.ProtodocTypeJson))
+	jsonDoc, err := protodoc.New(protodoc.WithType(protodoc.ProtodocTypeJson))
 
 	if err != nil {
 		fmt.Printf("failed to initialize, err=%v\n", err)

@@ -134,8 +134,7 @@ func NewJsonDoc(p *IProtodoc) Protodoc {
 //
 //	 // Execute the protodoc to generate API Documentation
 //	 if err := jsonDoc.Execute(); err != nil {
-//		   fmt.Printf("failed to execute, err=%v\n", err)
-//		   return
+//		   return err
 //	 }
 func (j *jsonDoc) Generate() []byte {
 	doc := JsonDoc{Name: j.p.Name}

@@ -5,8 +5,6 @@ import (
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
-const defaultApiDocName = "API Documentation"
-
 type Protodoc interface {
 	Generate() []byte
 	Execute() error
@@ -26,17 +24,17 @@ type IProtodoc struct {
 	FileDescriptors []*descriptorpb.FileDescriptorProto
 }
 
-func New(filename string, destFile string, opts ...Option) (Protodoc, error) {
-	fileDescriptor, err := internal.ReadFile(filename)
+func New(opts ...Option) (Protodoc, error) {
+	fileDescriptor, err := internal.ReadFile(DefaultDescriptorFile)
 
 	if err != nil {
 		return nil, err
 	}
 
 	p := &IProtodoc{
-		Name:            defaultApiDocName,
-		Filename:        filename,
-		DestFile:        destFile,
+		Name:            DefaultApiDocName,
+		Filename:        DefaultDescriptorFile,
+		DestFile:        DefaultApiFileOut,
 		FileDescriptors: fileDescriptor,
 		TypeName:        ProtodocTypeMD,
 	}
@@ -44,6 +42,8 @@ func New(filename string, destFile string, opts ...Option) (Protodoc, error) {
 	for _, opt := range opts {
 		opt(p)
 	}
+
+	p.DestFile = DefaultApiFileName + p.TypeName.ExtractExtension()
 
 	switch p.TypeName {
 	case ProtodocTypeMD:
