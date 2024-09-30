@@ -1,43 +1,44 @@
 package protodoc
 
 import (
-	"encoding/json"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
-type jsonDoc struct {
+type yamlDoc struct {
 	p *IProtodoc
 }
 
-func NewJsonDoc(p *IProtodoc) Protodoc {
-	return &jsonDoc{p}
+func NewYamlDoc(p *IProtodoc) Protodoc {
+	return &yamlDoc{p}
 }
 
-// Generate generates JSON documentation from the FileDescriptorProto.
+// Generate generates YAML documentation from the FileDescriptorProto.
 //
 // This method iterates through the file descriptors associated with the
 // Protobuf definitions, extracting message and service information to
-// construct a structured JSON document. The resulting JSON document
+// construct a structured YAML document. The resulting YAML document
 // includes the API name, detailed message types with their fields,
 // and service methods with their respective input and output types.
 //
 // Returns:
-//   - A byte slice containing the JSON representation of the API documentation.
+//   - A byte slice containing the YAML representation of the API documentation.
 //
 // Example usage:
 //
 //	 // Execute the protodoc to generate API Documentation
-//	 if err := jsonDoc.Execute(); err != nil {
+//	 if err := yamlDoc.Execute(); err != nil {
 //		   return err
 //	 }
-func (j *jsonDoc) Generate() []byte {
+func (j *yamlDoc) Generate() []byte {
 	doc := j.p.generateAPIDoc()
 
-	res, _ := json.MarshalIndent(doc, "", "  ")
+	res, _ := yaml.Marshal(doc)
 	return res
 }
 
-func (j *jsonDoc) Execute() error {
+func (j *yamlDoc) Execute() error {
 	doc := j.Generate()
 
 	err := os.WriteFile(j.p.DestFile, doc, 0644)

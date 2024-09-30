@@ -98,6 +98,18 @@ message YourResponse {
 }
 ```
 
+## Types
+
+There are many data types used in the generated documentation. The table below summarizes the different types and their meanings.
+
+| Type                          | Description                                | Example                          |
+|-------------------------------|--------------------------------------------|----------------------------------|
+| **Common Types**               | Basic types like string, integer, etc.     | `string`, `int`, etc.            |
+| **Optional Types**             | Common types that are optional             | `string*`, `int*`, etc.          |
+| **Message Types**              | Custom Protobuf message types              | `#User`, `#Customer`             |
+| **Message Types (Optional)**   | Message types that are optional            | `#User*`                         |
+| **List Types**                 | Lists of common or message types           | `string[]`, `int[]`, `#User[]`   |
+
 ## Examples
 
 For more examples you can see the [examples](./examples/) folders.
