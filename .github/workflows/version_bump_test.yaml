@@ -48,3 +48,4 @@ jobs:
         run: goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          CREATE_CHANGELOG: ${{ secrets.CREATE_CHANGELOG }}
