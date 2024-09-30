@@ -25,6 +25,11 @@ func TestCommand(t *testing.T) {
 			typeName: "markdown",
 			filePath: "./api-documentation.md",
 		},
+		{
+			name:     "YAML_TYPE",
+			typeName: "yaml",
+			filePath: "./api-documentation.yaml",
+		},
 	}
 
 	for _, v := range testCases {
