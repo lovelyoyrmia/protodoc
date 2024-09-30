@@ -38,7 +38,7 @@ jobs:
           git config --global user.email "mokalulovelyo@gmail.com"
 
       - name: Bump version
-        run: standard-version --release-as major
+        run: standard-version --release-as patch
         
       - name: Push Commit
         run: git push origin HEAD --tags
