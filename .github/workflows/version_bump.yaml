@@ -31,9 +31,6 @@ jobs:
       - name: Install Git
         run: sudo apt-get install git
 
-      - name: Install GoReleaser
-        run: echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | sudo tee /etc/apt/sources.list.d/goreleaser.list && sudo apt update && sudo apt install goreleaser
-        
       - name: Configure Git
         run: |
           git config --global user.name "lovelyoyrmia"
@@ -45,6 +42,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       
       - name: Run GoReleaser
-        run: goreleaser release --clean
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          # either 'goreleaser' (default) or 'goreleaser-pro'
+          distribution: goreleaser
+          # 'latest', 'nightly', or a semver
+          version: "~> v2"
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          CREATE_CHANGELOG: ${{ secrets.CREATE_CHANGELOG }}
