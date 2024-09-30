@@ -42,13 +42,10 @@ jobs:
           git config --global user.email "mokalulovelyo@gmail.com"
 
       - name: Bump version
-        run: python bump_version.py patch
-        
-      - name: Push Commit
-        run: git push origin HEAD --tags
+        run: python bump_version.py dev
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-      
+          
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:

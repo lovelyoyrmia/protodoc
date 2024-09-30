@@ -41,53 +41,59 @@ def main(bump_type):
     # Split the version into its components
     parts = current_version.split(".")
 
-    if len(parts) != 3 and not parts[2].startswith("dev"):
-        print(f"Unexpected version format: {current_version}")
-        sys.exit(1)
-
-    major, minor, patch = map(int, parts[0:3])
-
-    # Check if the current version has a build number and extract it
     build_number = 0
-    if "dev" in parts[2]:
-        patch, build_number = parts[2].split("-dev.")
-        patch = int(patch)
-        build_number = int(build_number)
+    if len(parts) == 4:
+        # The fourth part is build_number, and patch might be in the format "1-dev"
+        major, minor = map(int, parts[0:2])
+        
+        # Handle patch if it contains a dash
+        patch_parts = parts[2].split("-")
+        patch = int(patch_parts[0])  # Extract the numeric part of patch
+        
+        build_number = int(parts[3])
     else:
-        build_number = 0  # Default build number if not present
+        major, minor, patch = map(int, parts[0:3])
 
+    # Get the current branch
+    current_branch = get_current_branch()
+    print(f"Current branch: {current_branch}")
+    
     # Increment based on the bump type
     if bump_type == "major":
         major += 1
         minor = 0
         patch = 0
-        build_number = 0  # Reset build number on major bump
-    elif bump_type == "minor":
+    
+    if bump_type == "minor":
         minor += 1
         patch = 0
-        build_number = 0  # Reset build number on minor bump
-    elif bump_type == "patch":
+    
+    if bump_type == "patch":
         patch += 1
+    
+    if current_branch == "development" or bump_type == "dev":
+        build_number += 1
     else:
         print(f"Invalid bump type: {bump_type}. Use 'major', 'minor', or 'patch'.")
         sys.exit(1)
 
-    # Get the current branch
-    current_branch = get_current_branch()
-    print(f"Current branch: {current_branch}")
-
     # Construct the new version
     if current_branch == "development":  # or whatever name you use for your development branch
-        new_version = f"v{major}.{minor}.{patch}-dev.{build_number + 1}"
+        new_version = f"{major}.{minor}.{patch}-dev.{build_number}"
     else:
-        new_version = f"v{major}.{minor}.{patch}"
+        new_version = f"{major}.{minor}.{patch}"
 
     update_version_file(version_file, new_version)
 
     print(f"Updated version to: {new_version}")
 
+    # Commit the changes
+    subprocess.run(["git", "commit", "-am", f"Bump version to v{new_version}"])
+
     # Stage the changes
     subprocess.run(["standard-version", "--release-as", new_version])
+
+    subprocess.run(["git", "push", "origin", "HEAD", "--tags"])
 
     print("Pushed changes and tag to remote repository.")
 
