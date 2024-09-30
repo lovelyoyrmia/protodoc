@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/lovelyoyrmia/protodoc"
+	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 // This is the main entry point for the documentation generator
@@ -53,13 +54,15 @@ func main() {
 		return
 	}
 
-	// Initialize protodoc
-	mdDoc, err := protodoc.New()
+	fileDesc, err := internal.ReadFile(protodoc.DefaultDescriptorFile)
 
 	if err != nil {
-		fmt.Printf("failed to initialize, err=%v\n", err)
+		fmt.Printf("failed to execute internal.ReadFile, err=%v\n", err)
 		return
 	}
+
+	// Initialize protodoc
+	mdDoc := protodoc.New(protodoc.WithFileDescriptor(fileDesc))
 
 	// Execute the protodoc to generate API Documentation
 	if err := mdDoc.Execute(); err != nil {
@@ -68,12 +71,7 @@ func main() {
 	}
 
 	// Initialize protodoc
-	jsonDoc, err := protodoc.New(protodoc.WithType(protodoc.ProtodocTypeJson))
-
-	if err != nil {
-		fmt.Printf("failed to initialize, err=%v\n", err)
-		return
-	}
+	jsonDoc := protodoc.New(protodoc.WithType(protodoc.ProtodocTypeJson), protodoc.WithFileDescriptor(fileDesc))
 
 	// Execute the protodoc to generate API Documentation
 	if err := jsonDoc.Execute(); err != nil {

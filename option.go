@@ -3,9 +3,18 @@ package protodoc
 import (
 	"fmt"
 	"path/filepath"
+
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 type Option func(*IProtodoc)
+
+// WithType implements option file descriptor proto
+func WithFileDescriptor(fileDesc []*descriptorpb.FileDescriptorProto) Option {
+	return func(p *IProtodoc) {
+		p.FileDescriptors = fileDesc
+	}
+}
 
 // WithType implements option ProtodocType
 func WithType(typeName ProtodocType) Option {
