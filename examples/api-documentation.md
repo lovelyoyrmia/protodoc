@@ -1,22 +1,5 @@
 # API Documentation
 
-### Message: QueryParameter
-| Field Name | Type |
-|------------|------|
-| name | string* |
-| type | string* |
-| description | string* |
-| required | bool* |
-
-### Message: APIOptions
-| Field Name | Type |
-|------------|------|
-| path | string* |
-| method | string* |
-| summary | string* |
-| description | string* |
-| query_params | #.QueryParameter[] |
-
 ### Message: User
 | Field Name | Type |
 |------------|------|

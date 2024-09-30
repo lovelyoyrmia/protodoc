@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
+	"gopkg.in/yaml.v3"
 )
 
 // Mock data for testing
@@ -125,7 +126,7 @@ var mockFileDescriptor = &descriptorpb.FileDescriptorProto{
 
 // Test Generate method of JsonDoc
 func TestGenerateJsonDoc(t *testing.T) {
-	jsonDoc := JsonDoc{
+	jsonDoc := APIDoc{
 		Name:    "API Documentation",
 		Author:  "",
 		BaseUrl: "",
@@ -185,7 +186,7 @@ func TestGenerateJsonDoc(t *testing.T) {
 				result := protoDoc.Generate()
 				require.NotEmpty(t, result)
 
-				var actualJson JsonDoc
+				var actualJson APIDoc
 				err := json.Unmarshal(result, &actualJson)
 				require.NoError(t, err)
 
@@ -198,6 +199,20 @@ func TestGenerateJsonDoc(t *testing.T) {
 			checkResponse: func(t *testing.T, protoDoc Protodoc) {
 				result := protoDoc.Generate()
 				require.NotEmpty(t, result)
+			},
+		},
+		{
+			name:     "YAML_TYPE",
+			typeName: ProtodocTypeYaml,
+			checkResponse: func(t *testing.T, protoDoc Protodoc) {
+				result := protoDoc.Generate()
+				require.NotEmpty(t, result)
+
+				var actualYaml APIDoc
+				err := yaml.Unmarshal(result, &actualYaml)
+				require.NoError(t, err)
+
+				require.Empty(t, actualYaml.Services)
 			},
 		},
 	}
