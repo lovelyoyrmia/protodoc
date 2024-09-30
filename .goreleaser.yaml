@@ -38,8 +38,19 @@ archives:
         format: zip
 
 changelog:
+  disable: "{{ .Env.CREATE_CHANGELOG }}"
   sort: asc
+  format: "{{.SHA}}: {{.Message}}"
   filters:
     exclude:
       - "^docs:"
       - "^test:"
+  groups:
+    - title: "⚡️ Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: "🐛 Bug Fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: Others
+      order: 999
