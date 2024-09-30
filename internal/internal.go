@@ -8,10 +8,14 @@ import (
 
 	"github.com/lovelyoyrmia/protodoc/options"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 var ErrFileSetNotFound = errors.New("no files found in descriptor set")
+
+// Function signature for getting extensions
+type GetExtensionFunc func(protoreflect.ProtoMessage, protoreflect.ExtensionType) interface{}
 
 // ReadFile function to read descriptor file and returns all files descriptor proto
 func ReadFile(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
@@ -74,7 +78,7 @@ func RemovePackagePrefix(typeName string, packageName string) string {
 }
 
 // ExtractMethod checks the annotations on the method
-func ExtractMethod(method *descriptorpb.MethodDescriptorProto, packageName string) *methodOptions {
+func ExtractMethod(method *descriptorpb.MethodDescriptorProto, packageName string, getExtension GetExtensionFunc) *methodOptions {
 	option := new(methodOptions)
 
 	option.Name = method.GetName()
@@ -83,7 +87,7 @@ func ExtractMethod(method *descriptorpb.MethodDescriptorProto, packageName strin
 
 	// Retrieve custom options
 	if method.GetOptions() != nil {
-		if apiOptions, ok := proto.GetExtension(method.GetOptions(), options.E_ApiOptions).(*options.APIOptions); ok {
+		if apiOptions, ok := getExtension(method.GetOptions(), options.E_ApiOptions).(*options.APIOptions); ok {
 			option.Path = apiOptions.GetPath()
 			option.Method = apiOptions.GetMethod()
 			option.Summary = apiOptions.GetSummary()

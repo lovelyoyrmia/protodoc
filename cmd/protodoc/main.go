@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/lovelyoyrmia/protodoc"
+	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 func main() {
@@ -25,17 +26,20 @@ func main() {
 	// Run protoc command
 	flags.runCommand()
 
-	// Initialize protodoc
-	pbDoc, err := protodoc.New(
-		protodoc.WithDocOut(flags.docOut),
-		protodoc.WithName(flags.name),
-		protodoc.WithType(protodoc.ProtodocType(flags.typeName)),
-	)
+	fileDesc, err := internal.ReadFile(protodoc.DefaultDescriptorFile)
 
 	if err != nil {
 		fmt.Printf("failed to initialize protoduc, err=%v\n", err)
 		return
 	}
+
+	// Initialize protodoc
+	pbDoc := protodoc.New(
+		protodoc.WithDocOut(flags.docOut),
+		protodoc.WithName(flags.name),
+		protodoc.WithType(protodoc.ProtodocType(flags.typeName)),
+		protodoc.WithFileDescriptor(fileDesc),
+	)
 
 	// Execute the protodoc to generate API Documentation
 	if err := pbDoc.Execute(); err != nil {

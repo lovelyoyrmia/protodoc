@@ -36,7 +36,7 @@
 
 ### Service: UserService
 ### Method: GetUser
-Endpoint: /UserService/GetUser
+Endpoint: /myapi/mymethod
 - **Input Type:** #GetUserRequest
 - **Output Type:** #GetUserResponse
 
@@ -59,12 +59,10 @@ Endpoint: /UserService/GetUser
 
 ### Service: CustomerService
 ### Method: GetCustomer
-Endpoint: /CustomerService/GetCustomer
+Endpoint: 
 - **Input Type:** #GetCustomerRequest
 - **Output Type:** #GetCustomerResponse
 
 
 GENERATED CODE WITH ❤️ BY lovelyoyrmia
-
-PLEASE MODIFY THIS FILE AND RUN ON YOUR SERVER.
 

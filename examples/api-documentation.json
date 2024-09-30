@@ -4,52 +4,6 @@
   "base_url": "",
   "messages": [
     {
-      "name": "QueryParameter",
-      "fields": [
-        {
-          "name": "name",
-          "type": "string*"
-        },
-        {
-          "name": "type",
-          "type": "string*"
-        },
-        {
-          "name": "description",
-          "type": "string*"
-        },
-        {
-          "name": "required",
-          "type": "bool*"
-        }
-      ]
-    },
-    {
-      "name": "APIOptions",
-      "fields": [
-        {
-          "name": "path",
-          "type": "string*"
-        },
-        {
-          "name": "method",
-          "type": "string*"
-        },
-        {
-          "name": "summary",
-          "type": "string*"
-        },
-        {
-          "name": "description",
-          "type": "string*"
-        },
-        {
-          "name": "query_params",
-          "type": "#.QueryParameter[]"
-        }
-      ]
-    },
-    {
       "name": "User",
       "fields": [
         {
