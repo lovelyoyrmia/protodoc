@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/lovelyoyrmia/protodoc/internal"
+	"google.golang.org/protobuf/proto"
 )
 
 type mdDoc struct {
@@ -66,15 +67,12 @@ func (m *mdDoc) Generate() []byte {
 			sb.WriteString("### Service: " + service.GetName() + "\n")
 
 			for _, method := range service.Method {
-				inputType := internal.RemovePackagePrefix(method.GetInputType(), packageName)
-				outputType := internal.RemovePackagePrefix(method.GetOutputType(), packageName)
-				// Add path information (assuming you have a way to derive it)
-				path := "/" + service.GetName() + "/" + method.GetName() // Example path
+				option := internal.ExtractMethod(method, packageName, proto.GetExtension)
 
 				sb.WriteString(fmt.Sprintf("### Method: %s\n", method.GetName()))
-				sb.WriteString(fmt.Sprintf("Endpoint: %s\n", path))
-				sb.WriteString(fmt.Sprintf("- **Input Type:** %s\n", inputType))
-				sb.WriteString(fmt.Sprintf("- **Output Type:** %s\n\n", outputType))
+				sb.WriteString(fmt.Sprintf("Endpoint: %s\n", option.Path))
+				sb.WriteString(fmt.Sprintf("- **Input Type:** %s\n", option.InputType))
+				sb.WriteString(fmt.Sprintf("- **Output Type:** %s\n\n", option.OutputType))
 			}
 		}
 	}

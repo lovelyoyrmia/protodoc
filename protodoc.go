@@ -1,7 +1,6 @@
 package protodoc
 
 import (
-	"github.com/lovelyoyrmia/protodoc/internal"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
@@ -24,19 +23,12 @@ type IProtodoc struct {
 	FileDescriptors []*descriptorpb.FileDescriptorProto
 }
 
-func New(opts ...Option) (Protodoc, error) {
-	fileDescriptor, err := internal.ReadFile(DefaultDescriptorFile)
-
-	if err != nil {
-		return nil, err
-	}
-
+func New(opts ...Option) Protodoc {
 	p := &IProtodoc{
-		Name:            DefaultApiDocName,
-		Filename:        DefaultDescriptorFile,
-		DestFile:        DefaultApiFileOut,
-		FileDescriptors: fileDescriptor,
-		TypeName:        ProtodocTypeMD,
+		Name:     DefaultApiDocName,
+		Filename: DefaultDescriptorFile,
+		DestFile: DefaultApiFileOut,
+		TypeName: ProtodocTypeMD,
 	}
 
 	for _, opt := range opts {
@@ -47,10 +39,10 @@ func New(opts ...Option) (Protodoc, error) {
 
 	switch p.TypeName {
 	case ProtodocTypeMD:
-		return NewMarkdownDoc(p), nil
+		return NewMarkdownDoc(p)
 	case ProtodocTypeJson:
-		return NewJsonDoc(p), nil
+		return NewJsonDoc(p)
 	}
 
-	return NewMarkdownDoc(p), nil
+	return NewMarkdownDoc(p)
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/lovelyoyrmia/protodoc/internal"
+	"google.golang.org/protobuf/proto"
 )
 
 // JsonDoc represents the overall API documentation structure.
@@ -156,7 +157,7 @@ func (j *jsonDoc) Generate() []byte {
 			serviceDoc := ServiceDoc{Name: service.GetName()}
 
 			for _, method := range service.Method {
-				option := internal.ExtractMethod(method, fileDescriptor.GetPackage())
+				option := internal.ExtractMethod(method, fileDescriptor.GetPackage(), proto.GetExtension)
 
 				// Convert the query parameters
 				queryParams := make([]*QueryParameterDoc, 0)
