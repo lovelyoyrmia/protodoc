@@ -23,6 +23,10 @@ jobs:
           go-version: '1.22.5'
       - run: go version
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -38,7 +42,7 @@ jobs:
           git config --global user.email "mokalulovelyo@gmail.com"
 
       - name: Bump version
-        run: standard-version --release-as patch
+        run: python bump_version.py patch
         
       - name: Push Commit
         run: git push origin HEAD --tags

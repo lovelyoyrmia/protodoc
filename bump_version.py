@@ -87,16 +87,7 @@ def main(bump_type):
     print(f"Updated version to: {new_version}")
 
     # Stage the changes
-    subprocess.run(["git", "add", version_file])
-
-    # Commit the changes
-    subprocess.run(["git", "commit", "-m", f"Bump version to {new_version}"])
-
-    # Create a new Git tag
-    subprocess.run(["git", "tag", new_version])
-
-    # Push the changes and the new tag to the remote repository
-    subprocess.run(["git", "push", "origin", "HEAD", "--tags"])
+    subprocess.run(["standard-version", "--release-as", new_version])
 
     print("Pushed changes and tag to remote repository.")
 
