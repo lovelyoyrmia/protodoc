@@ -42,7 +42,7 @@ jobs:
           git config --global user.email "mokalulovelyo@gmail.com"
 
       - name: Bump version
-        run: python bump_version.py dev
+        run: python bump_version.py patch
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           
