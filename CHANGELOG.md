@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0-dev.1](https://github.com/lovelyoyrmia/protodoc/compare/v0.0.1-dev.1...v1.1.0-dev.1) (2024-10-01)
+
+
+### Features
+
+* add custom template ([7c95ab6](https://github.com/lovelyoyrmia/protodoc/commit/7c95ab6eb98fbb6930b78aca62079dd55e633358))
+
 ### [0.0.1-dev.1](https://github.com/lovelyoyrmia/protodoc/compare/v0.0.1...v0.0.1-dev.1) (2024-10-01)
 
 
