@@ -35,11 +35,16 @@ func TestCommand(t *testing.T) {
 			typeName: "html",
 			filePath: "./api-documentation.html",
 		},
+		{
+			name:     "CUSTOM_TEMPLATE",
+			typeName: "html",
+			filePath: "./api-documentation.html",
+		},
 	}
 
 	for _, v := range testCases {
 		t.Run(v.name, func(tt *testing.T) {
-			cmd := exec.Command("go", "run", ".", "--proto_dir=../../examples", "--doc_opt=source_relative", "--type="+v.typeName)
+			cmd := exec.Command("go", "run", ".", "--proto_dir=../../examples", "--doc_opt=source_relative", "--type="+v.typeName, "--template_path=../../resources/html.tmpl")
 
 			err := cmd.Run()
 			require.NoError(tt, err)

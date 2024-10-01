@@ -41,3 +41,10 @@ func WithDocOut(docOut string) Option {
 		}
 	}
 }
+
+// WithCustomTemplate implements option the custom template want to be used
+func WithCustomTemplate(customTemplate string) Option {
+	return func(p *IProtodoc) {
+		p.CustomTemplate = customTemplate
+	}
+}

@@ -50,3 +50,14 @@ func (p ProtodocType) Render() (Processor, error) {
 
 	return nil, errors.New("failed to load renderer")
 }
+
+func (p ProtodocType) RenderCustom(inputTemplate string) Processor {
+	switch p {
+	case ProtodocTypeMD:
+		return &textRenderer{inputTemplate}
+	case ProtodocTypeHTML:
+		return &htmlRenderer{inputTemplate}
+	}
+
+	return &textRenderer{inputTemplate}
+}

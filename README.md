@@ -39,6 +39,7 @@ protodoc --proto_dir=./proto --doc_opt=source_relative --type=json --doc_out=.
 - `--doc_opt`: Documentation options for the generated documentation (`source_relative`).
 - `--doc_out`: Output file path for the generated documentation.
 - `--type`: Desired output format (`json`, `markdown`, `yaml`, `html`). Default type is `markdown`.
+- `--template_path`: Path to the custom template file (need to has `.tmpl` extension).
 
 ### Example Commands
 
@@ -63,6 +64,11 @@ protodoc --proto_dir=./proto --doc_opt=source_relative --type=json --doc_out=.
 
    ```bash
    protodoc --proto_dir=./proto --doc_opt=source_relative --type=html --doc_out=.
+   ```
+5. **Generate Documentation with Custom Template**
+
+   ```bash
+   protodoc --proto_dir=./proto --doc_opt=source_relative --type=html --doc_out=. --template_path=../custom_template.tmpl
    ```
 
 ## API Options
