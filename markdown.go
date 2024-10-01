@@ -1,12 +1,7 @@
 package protodoc
 
 import (
-	"fmt"
 	"os"
-	"strings"
-
-	"github.com/lovelyoyrmia/protodoc/internal"
-	"google.golang.org/protobuf/proto"
 )
 
 type mdDoc struct {
@@ -37,51 +32,17 @@ func NewMarkdownDoc(p *IProtodoc) Protodoc {
 //	 if err := mdDoc.Execute(); err != nil {
 //		   return err
 //	 }
-func (m *mdDoc) Generate() []byte {
-	var sb strings.Builder
+func (m *mdDoc) Generate() ([]byte, error) {
+	doc := m.p.generateAPIDoc()
 
-	sb.WriteString(fmt.Sprintf("# %s\n\n", m.p.Name))
-
-	for _, fileDescriptor := range m.p.FileDescriptors {
-		packageName := fileDescriptor.GetPackage()
-
-		for _, msg := range fileDescriptor.MessageType {
-			sb.WriteString("### Message: " + msg.GetName() + "\n")
-			sb.WriteString("| Field Name | Type |\n")
-			sb.WriteString("|------------|------|\n")
-
-			for _, field := range msg.Field {
-				typeName := internal.RemoveTypePrefix(field, packageName)
-
-				sb.WriteString(
-					fmt.Sprintf("| %s | %s |\n",
-						field.GetName(),
-						typeName,
-					),
-				)
-			}
-			sb.WriteString("\n")
-		}
-
-		for _, service := range fileDescriptor.Service {
-			sb.WriteString("### Service: " + service.GetName() + "\n")
-
-			for _, method := range service.Method {
-				option := internal.ExtractMethod(method, packageName, proto.GetExtension)
-
-				sb.WriteString(fmt.Sprintf("### Method: %s\n", method.GetName()))
-				sb.WriteString(fmt.Sprintf("Endpoint: %s\n", option.Path))
-				sb.WriteString(fmt.Sprintf("- **Input Type:** %s\n", option.InputType))
-				sb.WriteString(fmt.Sprintf("- **Output Type:** %s\n\n", option.OutputType))
-			}
-		}
-	}
-
-	return []byte(sb.String())
+	return RenderTemplate(ProtodocTypeMD, &doc, "")
 }
 
 func (m *mdDoc) Execute() error {
-	doc := m.Generate()
+	doc, err := m.Generate()
+	if err != nil {
+		return err
+	}
 
 	file, err := os.Create(m.p.DestFile)
 	if err != nil {
@@ -90,11 +51,6 @@ func (m *mdDoc) Execute() error {
 	defer file.Close()
 
 	_, err = file.Write(doc)
-	if err != nil {
-		return err
-	}
-
-	_, err = file.WriteString(GeneratedComments)
 	if err != nil {
 		return err
 	}
