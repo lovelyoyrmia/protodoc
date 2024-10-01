@@ -35,7 +35,7 @@ func NewMarkdownDoc(p *IProtodoc) Protodoc {
 func (m *mdDoc) Generate() ([]byte, error) {
 	doc := m.p.generateAPIDoc()
 
-	return RenderTemplate(ProtodocTypeMD, &doc, "")
+	return m.p.renderTemplate(ProtodocTypeMD, &doc)
 }
 
 func (m *mdDoc) Execute() error {

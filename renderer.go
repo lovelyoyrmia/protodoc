@@ -11,9 +11,9 @@ type Processor interface {
 	Apply(apiDoc *APIDoc) ([]byte, error)
 }
 
-func RenderTemplate(kind ProtodocType, apiDoc *APIDoc, inputTemplate string) ([]byte, error) {
-	if inputTemplate != "" {
-		processor := &textRenderer{inputTemplate}
+func (p IProtodoc) renderTemplate(kind ProtodocType, apiDoc *APIDoc) ([]byte, error) {
+	if p.CustomTemplate != "" {
+		processor := kind.RenderCustom(p.CustomTemplate)
 		return processor.Apply(apiDoc)
 	}
 
