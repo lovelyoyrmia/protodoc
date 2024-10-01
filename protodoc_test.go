@@ -183,11 +183,12 @@ func TestGenerateJsonDoc(t *testing.T) {
 			name:     "JSON_TYPE",
 			typeName: ProtodocTypeJson,
 			checkResponse: func(t *testing.T, protoDoc Protodoc) {
-				result := protoDoc.Generate()
+				result, err := protoDoc.Generate()
+				require.NoError(t, err)
 				require.NotEmpty(t, result)
 
 				var actualJson APIDoc
-				err := json.Unmarshal(result, &actualJson)
+				err = json.Unmarshal(result, &actualJson)
 				require.NoError(t, err)
 
 				require.Equal(t, jsonDoc, actualJson)
@@ -197,7 +198,8 @@ func TestGenerateJsonDoc(t *testing.T) {
 			name:     "MARKDOWN_TYPE",
 			typeName: ProtodocTypeMD,
 			checkResponse: func(t *testing.T, protoDoc Protodoc) {
-				result := protoDoc.Generate()
+				result, err := protoDoc.Generate()
+				require.NoError(t, err)
 				require.NotEmpty(t, result)
 			},
 		},
@@ -205,14 +207,24 @@ func TestGenerateJsonDoc(t *testing.T) {
 			name:     "YAML_TYPE",
 			typeName: ProtodocTypeYaml,
 			checkResponse: func(t *testing.T, protoDoc Protodoc) {
-				result := protoDoc.Generate()
+				result, err := protoDoc.Generate()
+				require.NoError(t, err)
 				require.NotEmpty(t, result)
 
 				var actualYaml APIDoc
-				err := yaml.Unmarshal(result, &actualYaml)
+				err = yaml.Unmarshal(result, &actualYaml)
 				require.NoError(t, err)
 
 				require.Empty(t, actualYaml.Services)
+			},
+		},
+		{
+			name:     "HTML_TYPE",
+			typeName: ProtodocTypeHTML,
+			checkResponse: func(t *testing.T, protoDoc Protodoc) {
+				result, err := protoDoc.Generate()
+				require.NoError(t, err)
+				require.NotEmpty(t, result)
 			},
 		},
 	}

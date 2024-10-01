@@ -1,10 +1,5 @@
 package protodoc
 
-const GeneratedComments = `
-GENERATED CODE WITH ❤️ BY lovelyoyrmia
-
-`
-
 const (
 	DefaultApiDocName     = "API Documentation"
 	DefaultApiDocsOut     = "."

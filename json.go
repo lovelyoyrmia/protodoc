@@ -30,17 +30,19 @@ func NewJsonDoc(p *IProtodoc) Protodoc {
 //	 if err := jsonDoc.Execute(); err != nil {
 //		   return err
 //	 }
-func (j *jsonDoc) Generate() []byte {
+func (j *jsonDoc) Generate() ([]byte, error) {
 	doc := j.p.generateAPIDoc()
 
-	res, _ := json.MarshalIndent(doc, "", "  ")
-	return res
+	return json.MarshalIndent(doc, "", "  ")
 }
 
 func (j *jsonDoc) Execute() error {
-	doc := j.Generate()
+	doc, err := j.Generate()
+	if err != nil {
+		return err
+	}
 
-	err := os.WriteFile(j.p.DestFile, doc, 0644)
+	err = os.WriteFile(j.p.DestFile, doc, 0644)
 	if err != nil {
 		return err
 	}

@@ -31,17 +31,19 @@ func NewYamlDoc(p *IProtodoc) Protodoc {
 //	 if err := yamlDoc.Execute(); err != nil {
 //		   return err
 //	 }
-func (j *yamlDoc) Generate() []byte {
+func (j *yamlDoc) Generate() ([]byte, error) {
 	doc := j.p.generateAPIDoc()
 
-	res, _ := yaml.Marshal(doc)
-	return res
+	return yaml.Marshal(doc)
 }
 
 func (j *yamlDoc) Execute() error {
-	doc := j.Generate()
+	doc, err := j.Generate()
+	if err != nil {
+		return err
+	}
 
-	err := os.WriteFile(j.p.DestFile, doc, 0644)
+	err = os.WriteFile(j.p.DestFile, doc, 0644)
 	if err != nil {
 		return err
 	}
