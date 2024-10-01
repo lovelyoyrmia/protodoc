@@ -68,6 +68,18 @@ func main() {
 		return
 	}
 
+	// Initialize protodoc type HTML
+	htmlDoc := protodoc.New(
+		protodoc.WithType(protodoc.ProtodocTypeHTML),
+		protodoc.WithFileDescriptor(fileDesc),
+	)
+
+	// Execute the protodoc to generate API Documentation
+	if err := htmlDoc.Execute(); err != nil {
+		fmt.Printf("failed to execute, err=%v\n", err)
+		return
+	}
+
 	if err := os.Remove(descOut); err != nil {
 		fmt.Printf("failed to execute, err=%v\n", err)
 		return
