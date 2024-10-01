@@ -7,7 +7,7 @@ import (
 )
 
 type Protodoc interface {
-	Generate() []byte
+	Generate() ([]byte, error)
 	Execute() error
 }
 
@@ -46,6 +46,8 @@ func New(opts ...Option) Protodoc {
 		return NewJsonDoc(p)
 	case ProtodocTypeYaml:
 		return NewYamlDoc(p)
+	case ProtodocTypeHTML:
+		return NewHTMLDoc(p)
 	}
 
 	return NewMarkdownDoc(p)

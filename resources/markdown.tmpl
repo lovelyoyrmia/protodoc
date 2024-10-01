@@ -1,0 +1,85 @@
+# {{.Name}}
+
+**Author**: {{.Author}}  
+**Base URL**: `{{.BaseUrl}}`
+
+---
+
+## Table of Contents
+
+- [Services](#services)
+{{range .Services}}
+  - [{{.Name}}](#{{.Name | anchor}})
+  {{range .Methods}}
+    - [{{.Name}}](#{{.Name | anchor}})
+  {{end}}
+{{end}}
+
+- [Messages](#messages)
+{{range .Messages}}
+  - [{{.Name}}](#{{.Name | anchor}})
+{{end}}
+
+---
+
+<a name="services"></a>
+## Services
+
+{{range .Services}}
+<a name="{{.Name | anchor}}"></a>
+### {{.Name}}
+
+{{range .Methods}}
+#### {{.Name}}
+
+- **HTTP Method**: `{{.Method}}`
+- **Endpoint**: `{{.Path}}`
+- **Summary**: {{.Summary}}
+- **Description**: {{.Description}}
+- **Input Type**: [{{.InputType}}]({{.InputType | anchor}})
+- **Output Type**: [{{.OutputType}}]({{.OutputType | anchor}})
+
+{{if .QueryParams}}
+##### Query Parameters
+
+| **Name** | **Type** | **Required** | **Description** |
+| -------- | -------- | ------------ | --------------- |
+{{range .QueryParams}}
+| `{{.Name}}` | `{{.Type}}` | {{if .Required}}Yes{{else}}No{{end}} | {{.Description}} |
+{{end}}
+
+{{else}}
+_No query parameters for this method._
+{{end}}
+
+---
+{{end}}
+
+---
+{{end}}
+
+---
+
+<a name="messages"></a>
+## Messages
+
+{{range .Messages}}
+<a name="{{.Name | anchor}}"></a>
+### {{.Name}}
+
+#### Fields
+
+| **Field Name** | **Type** |
+| -------------- | -------- |
+{{range .Fields}}
+| `{{.Name}}` | `{{.Type}}` |
+{{end}}
+
+---
+{{end}}
+
+---
+
+**Generated with ❤️ by Protodoc**
+
+Reach out : [lovelyoyrmia.com](https://lovelyoyrmia.com)

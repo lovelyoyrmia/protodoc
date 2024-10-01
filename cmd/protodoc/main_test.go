@@ -30,6 +30,11 @@ func TestCommand(t *testing.T) {
 			typeName: "yaml",
 			filePath: "./api-documentation.yaml",
 		},
+		{
+			name:     "HTML_TYPE",
+			typeName: "html",
+			filePath: "./api-documentation.html",
+		},
 	}
 
 	for _, v := range testCases {

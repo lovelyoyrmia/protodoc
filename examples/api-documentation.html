@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Documentation</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/swagger-ui.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+      }
+      .api-doc-container {
+        margin: 20px;
+      }
+      .api-header {
+        background-color: #323232;
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+      }
+      .api-header h1 {
+        margin: 0;
+      }
+      .method {
+        border: 1px solid #e6e6e6;
+        background-color: white;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+      .method h4 {
+        font-weight: bold;
+      }
+      .method-path {
+        font-family: monospace;
+        background-color: #f0f0f0;
+        padding: 5px;
+        border-radius: 3px;
+      }
+      .method-type {
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: white;
+        margin-right: 10px;
+      }
+      .method-type.GET {
+        background-color: #61affe;
+      }
+      .method-type.POST {
+        background-color: #49cc90;
+      }
+      .method-type.PUT {
+        background-color: #fca130;
+      }
+      .method-type.DELETE {
+        background-color: #f93e3e;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 8px;
+      }
+      th {
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="api-doc-container">
+      <div class="api-header">
+        <h1>API Documentation</h1>
+        <p>Author: </p>
+        <p>Base URL: <strong></strong></p>
+      </div>
+
+      <hr />
+
+      <h2>Services</h2>
+      
+      <div class="service">
+        <h3>UserService</h3>
+        
+        <div class="method">
+          <h4>GetUser</h4>
+          <span class="method-type POST">POST</span>
+          <span class="method-path">/myapi/mymethod</span>
+          <p>Get User Description</p>
+
+          <h5>Request</h5>
+          <p><strong>Input Type:</strong> #GetUserRequest</p>
+
+          <h5>Response</h5>
+          <p><strong>Output Type:</strong> #GetUserResponse</p>
+
+          
+          <h5>Query Parameters</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>Yes</td>
+                <td>The ID of the item to fetch.</td>
+              </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+        
+      </div>
+      
+      <div class="service">
+        <h3>CustomerService</h3>
+        
+        <div class="method">
+          <h4>GetCustomer</h4>
+          <span class="method-type POST">POST</span>
+          <span class="method-path">/myapi/mymethod</span>
+          <p>Get Customer Description</p>
+
+          <h5>Request</h5>
+          <p><strong>Input Type:</strong> #GetCustomerRequest</p>
+
+          <h5>Response</h5>
+          <p><strong>Output Type:</strong> #GetCustomerResponse</p>
+
+          
+          <h5>Query Parameters</h5>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>id</td>
+                <td>int</td>
+                <td>Yes</td>
+                <td>The ID of the item to fetch.</td>
+              </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+        
+      </div>
+      
+
+      <hr />
+
+      <h2>Messages</h2>
+      
+      <div class="message">
+        <h3>User</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>name</td>
+              <td>string*</td>
+            </tr>
+            
+            <tr>
+              <td>email</td>
+              <td>string*</td>
+            </tr>
+            
+            <tr>
+              <td>age</td>
+              <td>int32*</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="message">
+        <h3>GetUserRequest</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>id</td>
+              <td>int32*</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="message">
+        <h3>GetUserResponse</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>user</td>
+              <td>#User*</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="message">
+        <h3>Customer</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>name</td>
+              <td>string*</td>
+            </tr>
+            
+            <tr>
+              <td>email</td>
+              <td>string*</td>
+            </tr>
+            
+            <tr>
+              <td>age</td>
+              <td>int32*</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="message">
+        <h3>GetCustomerRequest</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>id</td>
+              <td>int32*</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="message">
+        <h3>GetCustomerResponse</h3>
+        <h5>Fields</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>user</td>
+              <td>#Customer[]</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </body>
+</html>

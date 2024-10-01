@@ -4,41 +4,41 @@ import (
 	"os"
 )
 
-type mdDoc struct {
+type htmlDoc struct {
 	p *IProtodoc
 }
 
-func NewMarkdownDoc(p *IProtodoc) Protodoc {
-	return &mdDoc{p}
+func NewHTMLDoc(p *IProtodoc) Protodoc {
+	return &htmlDoc{p}
 }
 
-// Generate generates Markdown documentation from the FileDescriptorProto.
+// Generate generates HTML documentation from the FileDescriptorProto.
 //
 // This method processes the file descriptors associated with the
 // Protobuf definitions to extract information about message types,
-// fields, and service methods. It constructs a structured Markdown
+// fields, and service methods. It constructs a structured HTML
 // representation of the API documentation.
 //
-// The generated Markdown follows a format that is easy to read
+// The generated HTML follows a format that is easy to read
 // and can be used for documentation purposes, either in a
 // README file or in a dedicated documentation site.
 //
 // Returns:
-//   - A byte slice containing the Markdown representation of the API documentation.
+//   - A byte slice containing the HTML representation of the API documentation.
 //
 // Example usage:
 //
 //	 // Execute the protodoc to generate API Documentation
-//	 if err := mdDoc.Execute(); err != nil {
+//	 if err := htmlDoc.Execute(); err != nil {
 //		   return err
 //	 }
-func (m *mdDoc) Generate() ([]byte, error) {
+func (m *htmlDoc) Generate() ([]byte, error) {
 	doc := m.p.generateAPIDoc()
 
-	return RenderTemplate(ProtodocTypeMD, &doc, "")
+	return RenderTemplate(ProtodocTypeHTML, &doc, "")
 }
 
-func (m *mdDoc) Execute() error {
+func (m *htmlDoc) Execute() error {
 	doc, err := m.Generate()
 	if err != nil {
 		return err

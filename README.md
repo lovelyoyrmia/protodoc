@@ -1,12 +1,13 @@
 # Protobuf API Documentation Generator CLI
 
-This command-line interface (CLI) tool provides a simple way to generate API documentation in various formats (JSON, Markdown, YAML) from Protocol Buffer (Protobuf) files. It streamlines the documentation process for APIs defined using Protobuf, making it easier to understand and utilize your services.
+This command-line interface (CLI) tool provides a simple way to generate API documentation in various formats (JSON, Markdown, YAML, HTML) from Protocol Buffer (Protobuf) files. It streamlines the documentation process for APIs defined using Protobuf, making it easier to understand and utilize your services.
 
 ## Features
 
 - Generate API documentation in JSON format.
 - Generate API documentation in Markdown format.
 - Generate API documentation in YAML format.
+- Generate API documentation in HTML format.
 - Support for Protobuf message and service definitions.
 - Custom annotations for additional metadata (like paths and methods).
 
@@ -37,7 +38,7 @@ protodoc --proto_dir=./proto --doc_opt=source_relative --type=json --doc_out=.
 - `--proto_dir`: Path to the Protobuf directory (can accept multiple files).
 - `--doc_opt`: Documentation options for the generated documentation (`source_relative`).
 - `--doc_out`: Output file path for the generated documentation.
-- `--type`: Desired output format (`json`, `markdown`, `yaml`). Default type is `markdown`.
+- `--type`: Desired output format (`json`, `markdown`, `yaml`, `html`). Default type is `markdown`.
 
 ### Example Commands
 
@@ -57,6 +58,11 @@ protodoc --proto_dir=./proto --doc_opt=source_relative --type=json --doc_out=.
 
    ```bash
    protodoc --proto_dir=./proto --doc_opt=source_relative --type=yaml --doc_out=.
+   ```
+4. **Generate HTML Documentation**
+
+   ```bash
+   protodoc --proto_dir=./proto --doc_opt=source_relative --type=html --doc_out=.
    ```
 
 ## API Options

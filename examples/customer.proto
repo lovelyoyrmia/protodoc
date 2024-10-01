@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package example;
 
+import "options/options.proto";
+
 option go_package = "github.com/lovelyoyrmia/protobuf-examples";
 
 message Customer {
@@ -19,5 +21,18 @@ message GetCustomerResponse {
 }
 
 service CustomerService {
-    rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse);
+    rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {
+        option (api_options) = {
+            summary: "Get Customer"
+            description: "Get Customer Description"
+            path: "/myapi/mymethod"
+            method: "POST"
+            query_params: {
+                name: "id",
+                type: "int",
+                description: "The ID of the item to fetch.",
+                required: true,
+            }
+        };
+    };
 }

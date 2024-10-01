@@ -25,7 +25,8 @@ message GetUserResponse {
 service UserService {
     rpc GetUser(GetUserRequest) returns (GetUserResponse) {
         option (api_options) = {
-            summary: "Get User Request"
+            summary: "Get User"
+            description: "Get User Description"
             path: "/myapi/mymethod"
             method: "POST"
             query_params: {

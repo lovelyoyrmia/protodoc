@@ -73,9 +73,6 @@ def main(bump_type):
     
     if current_branch == "development" or bump_type == "dev":
         build_number += 1
-    else:
-        print(f"Invalid bump type: {bump_type}. Use 'major', 'minor', or 'patch'.")
-        sys.exit(1)
 
     # Construct the new version
     if current_branch == "development":  # or whatever name you use for your development branch

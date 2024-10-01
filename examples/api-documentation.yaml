@@ -38,8 +38,8 @@ services:
     - name: UserService
       methods:
         - name: GetUser
-          summary: Get User Request
-          description: ""
+          summary: Get User
+          description: Get User Description
           path: /myapi/mymethod
           method: POST
           input_type: '#GetUserRequest'
@@ -52,10 +52,14 @@ services:
     - name: CustomerService
       methods:
         - name: GetCustomer
-          summary: ""
-          description: ""
-          path: ""
-          method: ""
+          summary: Get Customer
+          description: Get Customer Description
+          path: /myapi/mymethod
+          method: POST
           input_type: '#GetCustomerRequest'
           output_type: '#GetCustomerResponse'
-          query_params: []
+          query_params:
+            - name: id
+              type: int
+              description: The ID of the item to fetch.
+              required: true
