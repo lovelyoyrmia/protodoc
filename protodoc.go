@@ -21,6 +21,8 @@ type IProtodoc struct {
 	DestFile string
 	// Type Name is the type documentation wants to be generated
 	TypeName ProtodocType
+	// Custom Template is the custom template for documentation
+	CustomTemplate string
 
 	FileDescriptors []*descriptorpb.FileDescriptorProto
 }

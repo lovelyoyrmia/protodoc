@@ -37,6 +37,7 @@ func main() {
 	pbDoc := protodoc.New(
 		protodoc.WithDocOut(flags.docOut),
 		protodoc.WithName(flags.name),
+		protodoc.WithCustomTemplate(flags.customTemplate),
 		protodoc.WithType(protodoc.ProtodocType(flags.typeName)),
 		protodoc.WithFileDescriptor(fileDesc),
 	)
@@ -53,7 +54,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("✅ Generated the code !")
+	fmt.Printf("✅ Generated the %s documentation !\n", flags.typeName)
 }
 
 func (f *Flags) runCommand() {
@@ -62,7 +63,7 @@ func (f *Flags) runCommand() {
 	defer l.Unlock()
 
 	// Gather all .proto files
-	protoFiles, err := getAllProtoFiles(f.protoDir, f.sourceRelative)
+	protoFiles, err := f.getAllProtoFiles()
 	if err != nil {
 		fmt.Println("error reading proto files!")
 		return
@@ -121,14 +122,35 @@ func (f *Flags) handleFlags() bool {
 		return true
 	}
 
+	if !f.CheckCustomTemplate() {
+		f.PrintError()
+		return true
+	}
+
 	return false
 }
 
-func getAllProtoFiles(protoDir string, sourceRelative bool) ([]string, error) {
+// loadTemplate tries to load a template from a custom path
+func (f *Flags) loadTemplate() (string, error) {
+	// Check if the file exists at the given path
+	if _, err := os.Stat(f.customTemplatePath); os.IsNotExist(err) {
+		return "", err // File does not exist
+	}
+
+	// Read the file contents
+	content, err := os.ReadFile(f.customTemplatePath)
+	if err != nil {
+		return "", err // Error reading file
+	}
+
+	return string(content), nil
+}
+
+func (f *Flags) getAllProtoFiles() ([]string, error) {
 	var protoFiles []string
 
-	if !sourceRelative {
-		err := filepath.Walk(protoDir, func(path string, info os.FileInfo, err error) error {
+	if !f.sourceRelative {
+		err := filepath.Walk(f.protoDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
@@ -145,14 +167,14 @@ func getAllProtoFiles(protoDir string, sourceRelative bool) ([]string, error) {
 		return protoFiles, nil
 	}
 
-	files, err := os.ReadDir(protoDir)
+	files, err := os.ReadDir(f.protoDir)
 	if err != nil {
 		return nil, err
 	}
 
 	for _, file := range files {
 		if filepath.Ext(file.Name()) == ".proto" {
-			protoFiles = append(protoFiles, filepath.Join(protoDir, file.Name()))
+			protoFiles = append(protoFiles, filepath.Join(f.protoDir, file.Name()))
 		}
 	}
 

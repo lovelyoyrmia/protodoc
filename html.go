@@ -20,8 +20,7 @@ func NewHTMLDoc(p *IProtodoc) Protodoc {
 // representation of the API documentation.
 //
 // The generated HTML follows a format that is easy to read
-// and can be used for documentation purposes, either in a
-// README file or in a dedicated documentation site.
+// and can be used for documentation purposes.
 //
 // Returns:
 //   - A byte slice containing the HTML representation of the API documentation.
@@ -35,7 +34,7 @@ func NewHTMLDoc(p *IProtodoc) Protodoc {
 func (m *htmlDoc) Generate() ([]byte, error) {
 	doc := m.p.generateAPIDoc()
 
-	return RenderTemplate(ProtodocTypeHTML, &doc, "")
+	return m.p.renderTemplate(ProtodocTypeHTML, &doc)
 }
 
 func (m *htmlDoc) Execute() error {

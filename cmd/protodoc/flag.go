@@ -26,6 +26,8 @@ See https://github.com/lovelyoyrmia/protodoc for more details.
 var validTypes = []string{
 	protodoc.ProtodocTypeJson.String(),
 	protodoc.ProtodocTypeMD.String(),
+	protodoc.ProtodocTypeHTML.String(),
+	protodoc.ProtodocTypeYaml.String(),
 }
 
 // Version returns the currently running version of protodoc
@@ -35,18 +37,20 @@ func Version() string {
 
 // Flags contains details about the CLI invocation of protodoc
 type Flags struct {
-	appName        string
-	flagSet        *flag.FlagSet
-	err            error
-	showHelp       bool
-	showVersion    bool
-	name           string
-	protoDir       string
-	typeName       string
-	docOut         string
-	docOpt         string
-	sourceRelative bool
-	writer         io.Writer
+	appName            string
+	flagSet            *flag.FlagSet
+	err                error
+	showHelp           bool
+	showVersion        bool
+	name               string
+	protoDir           string
+	typeName           string
+	docOut             string
+	docOpt             string
+	customTemplatePath string
+	customTemplate     string
+	sourceRelative     bool
+	writer             io.Writer
 }
 
 // Code returns the status code to exit with after handling the supplied flags
@@ -71,11 +75,28 @@ func (f *Flags) ShowVersion() bool {
 // ShowValidTypes determines whether or not the type name is a valid type
 func (f *Flags) ShowValidTypes() bool {
 	// Check if the given command is in valid types
-	if f.typeName == "" && !slices.Contains(validTypes, f.typeName) {
+	return f.typeName == "" && !slices.Contains(validTypes, f.typeName)
+}
+
+// CheckCustomTemplate function to check file extension template
+func (f *Flags) CheckCustomTemplate() bool {
+	if f.customTemplatePath == "" {
 		return true
 	}
 
-	return false
+	if !strings.HasSuffix(f.customTemplatePath, ".tmpl") {
+		f.err = fmt.Errorf("custom template path must have `.tmpl` suffix")
+		return false
+	}
+
+	customTemplate, err := f.loadTemplate()
+	if err != nil {
+		f.err = fmt.Errorf("failed to read custom template, err=%v", err)
+		return false
+	}
+
+	f.customTemplate = customTemplate
+	return true
 }
 
 // CheckRequiredArgs function to check args are required
@@ -132,7 +153,8 @@ func ParseFlags(w io.Writer, args []string) *Flags {
 	f.flagSet.StringVar(&f.protoDir, "proto_dir", "", "proto_dir is the directory of the all protobuf files.")
 	f.flagSet.StringVar(&f.docOut, "doc_out", protodoc.DefaultApiDocsOut, "doc_out is the custom path directory of the API Documentation will be created.")
 	f.flagSet.StringVar(&f.typeName, "type", protodoc.ProtodocTypeMD.String(), "type is the API Documentation type.")
-	f.flagSet.StringVar(&f.docOpt, "doc_opt", "", "optional documentation options (source_relative)")
+	f.flagSet.StringVar(&f.docOpt, "doc_opt", "", "doc_opt is the optional documentation options (source_relative)")
+	f.flagSet.StringVar(&f.customTemplatePath, "template_path", "", "template_path is the path of custom template, examples: '../../template.tmpl'")
 
 	f.flagSet.BoolVar(&f.showHelp, "help", false, "Show this help message")
 	f.flagSet.BoolVar(&f.showVersion, "version", false, fmt.Sprintf("Print the current version (%v)", Version()))
