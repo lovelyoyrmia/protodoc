@@ -7,10 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"github.com/lovelyoyrmia/protodoc"
-	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 func main() {
@@ -26,10 +24,10 @@ func main() {
 	// Run protoc command
 	flags.runCommand()
 
-	fileDesc, err := internal.ReadFile(protodoc.DefaultDescriptorFile)
+	fileDesc, err := protodoc.GenerateDescriptor(protodoc.DefaultDescriptorFile)
 
 	if err != nil {
-		fmt.Printf("failed to initialize protoduc, err=%v\n", err)
+		fmt.Printf("failed to generate descriptor, err=%v\n", err)
 		return
 	}
 
@@ -58,10 +56,6 @@ func main() {
 }
 
 func (f *Flags) runCommand() {
-	var l sync.Mutex
-	l.Lock()
-	defer l.Unlock()
-
 	// Gather all .proto files
 	protoFiles, err := f.getAllProtoFiles()
 	if err != nil {

@@ -1,40 +1,16 @@
 package internal
 
 import (
-	"errors"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/lovelyoyrmia/protodoc/options"
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
-var ErrFileSetNotFound = errors.New("no files found in descriptor set")
-
 // Function signature for getting extensions
 type GetExtensionFunc func(protoreflect.ProtoMessage, protoreflect.ExtensionType) interface{}
-
-// ReadFile function to read descriptor file and returns all files descriptor proto
-func ReadFile(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	fileDescSet := &descriptorpb.FileDescriptorSet{}
-	if err := proto.Unmarshal(data, fileDescSet); err != nil {
-		return nil, err
-	}
-
-	if len(fileDescSet.File) == 0 {
-		return nil, ErrFileSetNotFound
-	}
-
-	return fileDescSet.File, nil
-}
 
 // RemoveTypePrefix removes the "TYPE_" prefix from a given field type
 // and returns a string representation of the type. It also handles

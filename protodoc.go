@@ -1,10 +1,15 @@
 package protodoc
 
 import (
+	"errors"
+	"os"
+
 	"github.com/lovelyoyrmia/protodoc/internal"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
+
+var ErrFileSetNotFound = errors.New("no files found in descriptor set")
 
 type Protodoc interface {
 	Generate() ([]byte, error)
@@ -15,8 +20,6 @@ type IProtodoc struct {
 	// Name of the API Documentation.
 	// Default value is "API Documentation"
 	Name string
-	// Filename is the name of the generated protobuf file.
-	Filename string
 	// Destination File is the path name of the API Documentation will be created.
 	DestFile string
 	// Type Name is the type documentation wants to be generated
@@ -30,7 +33,6 @@ type IProtodoc struct {
 func New(opts ...Option) Protodoc {
 	p := &IProtodoc{
 		Name:     DefaultApiDocName,
-		Filename: DefaultDescriptorFile,
 		DestFile: DefaultApiFileOut,
 		TypeName: ProtodocTypeMD,
 	}
@@ -55,7 +57,8 @@ func New(opts ...Option) Protodoc {
 	return NewMarkdownDoc(p)
 }
 
-func (i *IProtodoc) generateAPIDoc() APIDoc {
+// GenerateAPIDoc function to mapping file descriptors to API Documentation
+func (i *IProtodoc) GenerateAPIDoc() APIDoc {
 	doc := APIDoc{Name: i.Name}
 
 	for _, fileDescriptor := range i.FileDescriptors {
@@ -105,4 +108,23 @@ func (i *IProtodoc) generateAPIDoc() APIDoc {
 	}
 
 	return doc
+}
+
+// GenerateDescriptor function to read descriptor file and returns all files descriptor proto
+func GenerateDescriptor(filename string) ([]*descriptorpb.FileDescriptorProto, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	fileDescSet := &descriptorpb.FileDescriptorSet{}
+	if err := proto.Unmarshal(data, fileDescSet); err != nil {
+		return nil, err
+	}
+
+	if len(fileDescSet.File) == 0 {
+		return nil, ErrFileSetNotFound
+	}
+
+	return fileDescSet.File, nil
 }

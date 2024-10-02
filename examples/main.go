@@ -7,10 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"github.com/lovelyoyrmia/protodoc"
-	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 // This is the main examples for the documentation generator
@@ -28,7 +26,7 @@ func main() {
 	runCommand(protoDir, sourceRelative)
 
 	// Read file descriptor
-	fileDesc, err := internal.ReadFile(protodoc.DefaultDescriptorFile)
+	fileDesc, err := protodoc.GenerateDescriptor(protodoc.DefaultDescriptorFile)
 
 	if err != nil {
 		fmt.Printf("failed to execute internal.ReadFile, err=%v\n", err)
@@ -87,10 +85,6 @@ func main() {
 }
 
 func runCommand(protoDir string, sourceRelative bool) {
-	var l sync.Mutex
-	l.Lock()
-	defer l.Unlock()
-
 	// Gather all .proto files
 	protoFiles, err := getAllProtoFiles(protoDir, sourceRelative)
 	if err != nil {

@@ -32,7 +32,7 @@ func NewHTMLDoc(p *IProtodoc) Protodoc {
 //		   return err
 //	 }
 func (m *htmlDoc) Generate() ([]byte, error) {
-	doc := m.p.generateAPIDoc()
+	doc := m.p.GenerateAPIDoc()
 
 	return m.p.renderTemplate(ProtodocTypeHTML, &doc)
 }
