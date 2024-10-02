@@ -62,6 +62,9 @@ func (i *IProtodoc) GenerateAPIDoc() APIDoc {
 	doc := APIDoc{Name: i.Name}
 
 	for _, fileDescriptor := range i.FileDescriptors {
+		doc.Package = fileDescriptor.GetPackage()
+		doc.GoPackage = fileDescriptor.Options.GetGoPackage()
+
 		for _, msg := range fileDescriptor.MessageType {
 			message := MessageDoc{Name: msg.GetName()}
 			for _, field := range msg.Field {
