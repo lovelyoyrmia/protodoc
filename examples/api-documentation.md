@@ -2,6 +2,8 @@
 
 **Author**:   
 **Base URL**: ``
+**Package**: `example`
+**Golang Package**: `github.com/lovelyoyrmia/protodoc/examples`
 
 ---
 
