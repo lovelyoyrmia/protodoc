@@ -6,6 +6,12 @@ type APIDoc struct {
 	// This should be a descriptive title of the API, providing context to the users.
 	Name string `json:"name" yaml:"name"`
 
+	// Package represents the name of protobuf package
+	Package string `json:"package" yaml:"package"`
+
+	// GoPackage represents the name of protobuf go package
+	GoPackage string `json:"go_package" yaml:"go_package"`
+
 	// Author indicates the author of the API method documentation.
 	Author string `json:"author" yaml:"author"`
 

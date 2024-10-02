@@ -32,7 +32,7 @@ func NewYamlDoc(p *IProtodoc) Protodoc {
 //		   return err
 //	 }
 func (j *yamlDoc) Generate() ([]byte, error) {
-	doc := j.p.generateAPIDoc()
+	doc := j.p.GenerateAPIDoc()
 
 	return yaml.Marshal(doc)
 }

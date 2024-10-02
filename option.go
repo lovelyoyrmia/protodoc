@@ -9,7 +9,7 @@ import (
 
 type Option func(*IProtodoc)
 
-// WithType implements option file descriptor proto
+// WithFileDescriptor implements option file descriptor proto
 func WithFileDescriptor(fileDesc []*descriptorpb.FileDescriptorProto) Option {
 	return func(p *IProtodoc) {
 		p.FileDescriptors = fileDesc
@@ -23,7 +23,7 @@ func WithType(typeName ProtodocType) Option {
 	}
 }
 
-// WithType implements option name of API Documentation
+// WithName implements option name of API Documentation
 func WithName(name string) Option {
 	return func(p *IProtodoc) {
 		p.Name = name

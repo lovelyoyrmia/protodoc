@@ -1,4 +1,6 @@
 name: API Documentation
+package: example
+go_package: github.com/lovelyoyrmia/protodoc/examples
 author: ""
 base_url: ""
 messages:

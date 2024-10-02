@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/lovelyoyrmia/protodoc"
-	"github.com/lovelyoyrmia/protodoc/internal"
 )
 
 func main() {
@@ -25,10 +24,10 @@ func main() {
 	// Run protoc command
 	flags.runCommand()
 
-	fileDesc, err := internal.ReadFile(protodoc.DefaultDescriptorFile)
+	fileDesc, err := protodoc.GenerateDescriptor(protodoc.DefaultDescriptorFile)
 
 	if err != nil {
-		fmt.Printf("failed to initialize protoduc, err=%v\n", err)
+		fmt.Printf("failed to generate descriptor, err=%v\n", err)
 		return
 	}
 

@@ -5,7 +5,7 @@ package example;
 import "google/protobuf/descriptor.proto";
 import "options/options.proto";
 
-option go_package = "example";
+option go_package = "github.com/lovelyoyrmia/protodoc/examples";
 
 
 message User {

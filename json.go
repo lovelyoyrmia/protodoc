@@ -31,7 +31,7 @@ func NewJsonDoc(p *IProtodoc) Protodoc {
 //		   return err
 //	 }
 func (j *jsonDoc) Generate() ([]byte, error) {
-	doc := j.p.generateAPIDoc()
+	doc := j.p.GenerateAPIDoc()
 
 	return json.MarshalIndent(doc, "", "  ")
 }
